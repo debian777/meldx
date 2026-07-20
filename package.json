@@ -1,0 +1,222 @@
+{
+  "name": "meldx",
+  "displayName": "MeldX — Folder & Branch Diff",
+  "description": "Meld/DiffMerge-style recursive folder and git branch/ref diff inside VS Code (and Cursor), using native diff editors.",
+  "version": "0.0.1",
+  "license": "MIT",
+  "publisher": "debian777",
+  "author": {
+    "name": "debian777"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/debian777/meldx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/debian777/meldx/issues"
+  },
+  "homepage": "https://github.com/debian777/meldx#readme",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "SCM Providers",
+    "Other"
+  ],
+  "keywords": [
+    "diff",
+    "meld",
+    "folder compare",
+    "git",
+    "branch diff",
+    "merge"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "meldx",
+          "title": "MeldX",
+          "icon": "media/meldx.svg"
+        }
+      ]
+    },
+    "views": {
+      "meldx": [
+        {
+          "id": "meldx.comparisons",
+          "name": "Comparisons",
+          "icon": "media/meldx.svg",
+          "contextualTitle": "MeldX Comparisons"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "meldx.comparisons",
+        "contents": "No comparison yet.\n[Compare Folders](command:meldx.compareFolders)\n[Compare With Git Ref](command:meldx.compareWithRef)\n[Compare Two Git Refs](command:meldx.compareTwoRefs)"
+      }
+    ],
+    "commands": [
+      {
+        "command": "meldx.compareFolders",
+        "title": "Compare Folders…",
+        "category": "MeldX"
+      },
+      {
+        "command": "meldx.compareSelectedFolders",
+        "title": "Compare Selected Folders",
+        "category": "MeldX"
+      },
+      {
+        "command": "meldx.compareWithRef",
+        "title": "Compare With Git Ref (Working Tree)…",
+        "category": "MeldX"
+      },
+      {
+        "command": "meldx.compareTwoRefs",
+        "title": "Compare Two Git Refs…",
+        "category": "MeldX"
+      },
+      {
+        "command": "meldx.refresh",
+        "title": "Refresh",
+        "category": "MeldX",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "meldx.swapSides",
+        "title": "Swap Sides",
+        "category": "MeldX",
+        "icon": "$(arrow-swap)"
+      },
+      {
+        "command": "meldx.toggleIdentical",
+        "title": "Toggle Identical Files",
+        "category": "MeldX",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "meldx.openDiff",
+        "title": "Open Diff",
+        "category": "MeldX"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "meldx.compareSelectedFolders",
+          "when": "false"
+        },
+        {
+          "command": "meldx.openDiff",
+          "when": "false"
+        },
+        {
+          "command": "meldx.refresh",
+          "when": "false"
+        },
+        {
+          "command": "meldx.swapSides",
+          "when": "false"
+        },
+        {
+          "command": "meldx.toggleIdentical",
+          "when": "false"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "meldx.refresh",
+          "when": "view == meldx.comparisons",
+          "group": "navigation@1"
+        },
+        {
+          "command": "meldx.swapSides",
+          "when": "view == meldx.comparisons",
+          "group": "navigation@2"
+        },
+        {
+          "command": "meldx.toggleIdentical",
+          "when": "view == meldx.comparisons",
+          "group": "navigation@3"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "meldx.openDiff",
+          "when": "view == meldx.comparisons && viewItem =~ /^meldx\\.file/",
+          "group": "inline"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "meldx.compareSelectedFolders",
+          "when": "explorerResourceIsFolder && listMultiSelection",
+          "group": "3_compare"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "MeldX",
+      "properties": {
+        "meldx.exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/.git/**"
+          ],
+          "description": "Glob patterns to exclude from folder comparisons."
+        },
+        "meldx.showIdentical": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show files that are identical on both sides."
+        },
+        "meldx.gitPath": {
+          "type": "string",
+          "default": "",
+          "description": "Optional absolute path to the git binary. When empty, git is resolved from PATH."
+        },
+        "meldx.followSymlinks": {
+          "type": "boolean",
+          "default": false,
+          "description": "Follow symbolic links when walking folders (with cycle protection)."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile -- --production",
+    "compile": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test:unit": "vitest run",
+    "test:integration": "node ./out-test/tests/integration/runTest.js",
+    "pretest:integration": "tsc -p tsconfig.test.json",
+    "package": "vsce package --no-dependencies",
+    "deploy:vsce": "vsce publish --no-dependencies",
+    "deploy:ovsx": "ovsx publish"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@types/mocha": "^10.0.7",
+    "@types/node": "^20.14.0",
+    "@types/vscode": "1.90.0",
+    "@vscode/test-electron": "^3.0.0",
+    "@vscode/vsce": "^3.9.0",
+    "esbuild": "^0.28.0",
+    "eslint": "^9.0.0",
+    "glob": "^11.0.0",
+    "mocha": "^11.0.0",
+    "ovsx": "^0.10.0",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^2.1.0"
+  }
+}
