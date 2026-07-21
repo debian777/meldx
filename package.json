@@ -209,7 +209,7 @@
     "typecheck": "tsc --noEmit",
     "test:unit": "vitest run",
     "test:integration": "node ./out-test/tests/integration/runTest.js",
-    "pretest:integration": "tsc -p tsconfig.test.json",
+    "pretest:integration": "npm run compile && tsc -p tsconfig.test.json",
     "package": "vsce package --no-dependencies",
     "deploy:vsce": "vsce publish --no-dependencies",
     "deploy:ovsx": "ovsx publish",
