@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "node16",
     "target": "ES2022",
     "lib": ["ES2022"],
-    "moduleResolution": "node",
+    "types": ["node", "mocha"],
+    "moduleResolution": "node16",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,

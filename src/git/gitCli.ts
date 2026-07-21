@@ -81,6 +81,7 @@ export class GitCli {
     } catch (e) {
       throw new Error(
         `Unable to run git (${this.bin()}). Install git or set "meldx.gitPath". ${(e as Error).message}`,
+        { cause: e },
       );
     }
   }

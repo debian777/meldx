@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- "New Comparison…" command and title-bar button so a fresh comparison can be
+  started while one is already active (previously only reachable from the empty
+  welcome view).
+- Release scripts: `release`, `release:minor`, `release:pre`, `release:beta` for
+  cutting tagged releases via `npm version` + `git push --follow-tags`.
+
+### Changed
+
+- Release workflow marks GitHub releases as pre-releases for pre/beta tags.
+- Bumped dev dependencies and raised `engines.vscode` (and `@types/vscode`) to
+  1.125.0.
+
+### Fixed
+
+- Resolved dependency vulnerabilities (`diff`, `serialize-javascript`) via npm
+  `overrides`.
+
 ## [0.0.1] - 2026-07-20
 
 ### Added

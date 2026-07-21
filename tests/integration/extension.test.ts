@@ -7,6 +7,7 @@ import * as vscode from 'vscode';
 const EXTENSION_ID = 'debian777.meldx';
 
 const EXPECTED_COMMANDS = [
+  'meldx.newComparison',
   'meldx.compareFolders',
   'meldx.compareSelectedFolders',
   'meldx.compareWithRef',
@@ -57,6 +58,13 @@ describe('MeldX extension', () => {
 
     assert.ok(vscode.window.tabGroups.activeTabGroup.activeTab, 'a diff tab should be open');
     await vscode.commands.executeCommand('workbench.action.closeAllEditors');
-    fs.rmSync(dir, { recursive: true, force: true });
+    // Best-effort cleanup: on Windows the editor may still hold the file
+    // handle after close, so deletion can throw EPERM. The assertion above
+    // has already passed, so never fail the test on temp-dir cleanup.
+    try {
+      fs.rmSync(dir, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
+    } catch {
+      // leave the temp dir for the OS to reclaim
+    }
   });
 });

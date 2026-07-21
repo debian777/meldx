@@ -33,6 +33,7 @@ jobs:
         with:
           files: '*.vsix'
           generate_release_notes: true
+          prerelease: ${{ contains(github.ref_name, '-') }}
 
       # --- Registry publishing: built now, dormant until PUBLISH_ENABLED=true ---
       - name: Publish to VS Code Marketplace
