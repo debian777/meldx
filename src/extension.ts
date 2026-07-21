@@ -12,6 +12,7 @@ import { registerCompareFolders } from './commands/compareFolders';
 import { registerCompareSelectedFolders } from './commands/compareSelectedFolders';
 import { registerCompareWithRef } from './commands/compareWithRef';
 import { registerCompareTwoRefs } from './commands/compareTwoRefs';
+import { registerNewComparison } from './commands/newComparison';
 import { registerRefresh } from './commands/refresh';
 import { registerSwapSides } from './commands/swapSides';
 import { registerToggleIdentical } from './commands/toggleIdentical';
@@ -47,6 +48,7 @@ export function activate(context: vscode.ExtensionContext): void {
   bag.add(registerCompareSelectedFolders(controller));
   bag.add(registerCompareWithRef(controller));
   bag.add(registerCompareTwoRefs(controller));
+  bag.add(registerNewComparison());
   bag.add(registerRefresh(controller));
   bag.add(registerSwapSides(controller));
   bag.add(registerToggleIdentical());
