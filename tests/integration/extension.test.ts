@@ -7,6 +7,7 @@ import * as vscode from 'vscode';
 const EXTENSION_ID = 'debian777.meldx';
 
 const EXPECTED_COMMANDS = [
+  'meldx.newComparison',
   'meldx.compareFolders',
   'meldx.compareSelectedFolders',
   'meldx.compareWithRef',
@@ -57,6 +58,8 @@ describe('MeldX extension', () => {
 
     assert.ok(vscode.window.tabGroups.activeTabGroup.activeTab, 'a diff tab should be open');
     await vscode.commands.executeCommand('workbench.action.closeAllEditors');
-    fs.rmSync(dir, { recursive: true, force: true });
+    // On Windows the editor releases its file handle asynchronously after
+    // close, so an immediate delete can hit EPERM; retry with backoff.
+    fs.rmSync(dir, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
   });
 });
